@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { ActivityIndicator, Button, IconButton } from "react-native-paper";
 
 export default function RecentScreen() {
   const [recents, setRecents] = useState<any[]>([]);
@@ -142,13 +143,19 @@ export default function RecentScreen() {
     >
       <View className="p-4">
         {/* Header */}
-        <View className="mb-6">
-          <Text className="text-2xl font-bold mb-1 text-right text-gray-800">
-            جدول الطلبات السابقة
-          </Text>
-          <Text className="text-gray-500 text-right">
-            إجمالي الطلبات: {recents.length}
-          </Text>
+        <View className="mb-6 flex flex-row justify-between">
+          <IconButton
+            icon={"account"}
+            onPress={() => router.push("/(admin)/(dashboard)")}
+          />
+          <View>
+            <Text className="text-2xl font-bold mb-1 text-right text-gray-800">
+              جدول الطلبات السابقة
+            </Text>
+            <Text className="text-gray-500 text-right">
+              إجمالي الطلبات: {recents.length}
+            </Text>
+          </View>
         </View>
 
         {/* Table */}

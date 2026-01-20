@@ -1,6 +1,7 @@
 // context/SnackbarContext.tsx
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { Snackbar, Text, useTheme } from "react-native-paper";
+import { Text } from "react-native";
+import { Snackbar, useTheme } from "react-native-paper";
 
 interface SnackbarContextData {
   showSnackbar: (message: string) => void;
@@ -42,15 +43,16 @@ export const SnackbarProvider: React.FC<SnackbarProviderProps> = ({
         onDismiss={hideSnackbar}
         duration={3000}
         action={{
-          label: "Dismiss",
+          label: "إغلاق",
           onPress: hideSnackbar,
+          textColor: theme.colors.primary,
         }}
         style={{
-          backgroundColor: theme.colors.surface,
+          backgroundColor: "black",
           marginBottom: 20,
         }}
       >
-        <Text style={{ color: theme.colors.onSurface }}>{message}</Text>
+        <Text className="font-reg text-white">{message}</Text>
       </Snackbar>
     </SnackbarContext.Provider>
   );
