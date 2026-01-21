@@ -83,7 +83,7 @@ export default function HomeDashboard() {
 
       <View className="flex-row flex-wrap justify-between">
         {/* Admin Users */}
-        <View className="w-[48%] bg-blue-50 p-4 rounded-lg mb-4">
+        <View className="w-[100%] bg-blue-50 p-4 rounded-lg mb-4">
           <Text className="font-reg text-3xl font-bold text-blue-700">
             {stats.adminUsers}
           </Text>
@@ -91,7 +91,7 @@ export default function HomeDashboard() {
         </View>
 
         {/* Total Requests */}
-        <View className="w-[48%] bg-green-50 p-4 rounded-lg mb-4">
+        <View className="w-[100%] bg-green-50 p-4 rounded-lg mb-4">
           <Text className="font-reg text-3xl font-bold text-green-700">
             {stats.totalRequests}
           </Text>

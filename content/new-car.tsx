@@ -6,7 +6,6 @@ import FirstPage from "./caoursel/page-1";
 import SecondPage from "./caoursel/page-2";
 import ThirdPage from "./caoursel/page-3";
 
-
 import { useModal } from "@/providers/modal-provider";
 
 import { useRequestStore } from "@/store/use-request-store";
@@ -14,11 +13,16 @@ import FourthPage from "./caoursel/page-4";
 
 import { createNewRequest } from "@/actions";
 
+import useNotification from "@/hooks/use-notifications";
+
 export default function NewCar() {
   const [loading, setLoading] = useState(false);
   const storeData = useRequestStore().data;
   const { close } = useModal();
   const nextRef = useRef<{ goNext: () => void; getIndex: () => number }>(null);
+
+  const { sendNotificationToAllUsers } = useNotification();
+
   const handleGoNext = () => {
     nextRef?.current?.goNext();
   };
@@ -35,6 +39,12 @@ export default function NewCar() {
       setLoading(true);
       createNewRequest(storeData).then((res: any) => {
         if (res.status !== 201) return;
+        // send notification to admin about new request
+        // TODO: implement notification to admin
+        sendNotificationToAllUsers({
+          title: "طلب جديد",
+          body: "تم إنشاء طلب جديد من قبل مستخدم",
+        });
         close();
         setLoading(false);
         Alert.alert(

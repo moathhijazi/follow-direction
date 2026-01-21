@@ -16,8 +16,8 @@ interface Profile {
   avatar_url: string | null;
   role: string | null;
   access: string | null;
-
-  // Add other profile fields as needed
+  expo_push_token?: string | null;
+  notification_enabled?: boolean;
 }
 
 interface AuthState {
@@ -42,6 +42,36 @@ export const useAuth = () => {
     profile: null,
   });
 
+  // Separate function to disable notifications without hook dependency
+  const disableNotificationsOnLogout = useCallback(async (): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
+    try {
+      if (!authState.user?.id) {
+        return { success: true }; // No user to disable
+      }
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          notification_enabled: false,
+          expo_push_token: null,
+        })
+        .eq("id", authState.user.id);
+
+      if (error) {
+        console.error("Error disabling notifications:", error);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error: any) {
+      console.error("Exception disabling notifications:", error);
+      return { success: false, error: error.message };
+    }
+  }, [authState.user?.id]);
+
   // hooks/useAuth.ts (Updated fetchUserProfile function)
   const fetchUserProfile = useCallback(
     async (userId: string): Promise<Profile | null> => {
@@ -65,8 +95,9 @@ export const useAuth = () => {
                 id: userId,
                 full_name: null,
                 avatar_url: null,
-                role: null,
-                access: null,
+                role: "user", // Default role
+                access: "limit", // Default access
+                notification_enabled: false,
               })
               .select()
               .single();
@@ -101,7 +132,9 @@ export const useAuth = () => {
     try {
       await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(session));
       await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
-      await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+      if (profile) {
+        await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+      }
     } catch (error) {
       console.error("Error storing auth data:", error);
     }
@@ -293,6 +326,13 @@ export const useAuth = () => {
     try {
       setAuthState((prev) => ({ ...prev, loading: true }));
 
+      // Disable notifications before logout
+      const disableResult = await disableNotificationsOnLogout();
+      if (!disableResult.success) {
+        console.warn("Failed to disable notifications:", disableResult.error);
+        // Continue with logout anyway
+      }
+
       const { error } = await supabase.auth.signOut();
 
       if (error) {
@@ -383,6 +423,14 @@ export const useAuth = () => {
     }
   };
 
+  // Manually disable notifications (for use in components)
+  const disableNotifications = async (): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
+    return disableNotificationsOnLogout();
+  };
+
   return {
     // State
     isAuthenticated: authState.isAuthenticated,
@@ -397,6 +445,7 @@ export const useAuth = () => {
     checkAuth,
     refreshProfile,
     updateProfile,
+    disableNotifications, // Export this for components that need it
 
     // Helper functions
     getUserMetadata: () => authState.user?.user_metadata,

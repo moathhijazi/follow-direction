@@ -29,12 +29,15 @@ const MainScreen = () => {
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
         renderScene={renderScene}
-        sceneAnimationType="opacity"
+        sceneAnimationType="shifting"
+        activeColor="#2563eb"
         activeIndicatorStyle={{
-          backgroundColor: "#2563eb99",
+          backgroundColor: "#2563eb",
         }}
         barStyle={{
-          backgroundColor: "#2564eb08",
+          backgroundColor: "#ffffff",
+          borderTopWidth: 1,
+          borderTopColor: "#e5e7eb",
         }}
       />
     </SafeAreaView>

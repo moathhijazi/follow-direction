@@ -54,6 +54,42 @@ export default function RequestsDashboard() {
     showSnackbar("تم الحذف");
   };
 
+  const handleAccept = async (id: string) => {
+    const { error } = await supabase
+      .from("requests")
+      .update({ status: "processing" })
+      .eq("id", id);
+
+    if (error) {
+      showSnackbar("حدث خطأ");
+      return;
+    }
+
+    setRequests((prev) =>
+      prev.map((req) =>
+        req.id === id ? { ...req, status: "processing" } : req,
+      ),
+    );
+    showSnackbar("تم القبول");
+  };
+
+  const handleReject = async (id: string) => {
+    const { error } = await supabase
+      .from("requests")
+      .update({ status: "rejected" })
+      .eq("id", id);
+
+    if (error) {
+      showSnackbar("حدث خطأ");
+      return;
+    }
+
+    setRequests((prev) =>
+      prev.map((req) => (req.id === id ? { ...req, status: "rejected" } : req)),
+    );
+    showSnackbar("تم الرفض");
+  };
+
   const handleOpenModal = (request: any) => {
     open(
       <SafeAreaView>
@@ -66,6 +102,8 @@ export default function RequestsDashboard() {
           isFull={isAdminFullAccess}
           status={request.status}
           onDelete={() => handleDelete(request.id)}
+          onAccept={() => handleAccept(request.id)}
+          onReject={() => handleReject(request.id)}
         />
       </SafeAreaView>,
     );
@@ -100,24 +138,30 @@ export default function RequestsDashboard() {
               <View style={{ width: "100%", marginLeft: -4 }}>
                 <DataTable style={{ width: "100%" }}>
                   <DataTable.Header style={{ width: "100%" }}>
-                    <DataTable.Title style={{ flex: 2 }}>من</DataTable.Title>
-                    <DataTable.Title style={{ flex: 2 }}>الوقت</DataTable.Title>
+                    <DataTable.Title className="font-reg" style={{ flex: 2 }}>
+                      <Text className="font-reg">من</Text>
+                    </DataTable.Title>
+                    <DataTable.Title style={{ flex: 2 }}>
+                      <Text className="font-reg">الوقت</Text>
+                    </DataTable.Title>
 
                     <DataTable.Title style={{ flex: 1 }}>
-                      الحالة
+                      <Text className="font-reg">الحالة</Text>
                     </DataTable.Title>
                     <DataTable.Title style={{ flex: 0.5 }}>
-                      مشاهدة
+                      <Text className="font-reg">عرض</Text>
                     </DataTable.Title>
                   </DataTable.Header>
 
                   {requests.map((request) => (
                     <DataTable.Row key={request.id} style={{ width: "100%" }}>
                       <DataTable.Cell style={{ flex: 2 }}>
-                        <Text numberOfLines={1}>{request.from}</Text>
+                        <Text className="font-reg" numberOfLines={1}>
+                          {request.from}
+                        </Text>
                       </DataTable.Cell>
                       <DataTable.Cell style={{ flex: 2 }}>
-                        <Text>{request.time}</Text>
+                        <Text className="font-reg">{request.time}</Text>
                       </DataTable.Cell>
 
                       <DataTable.Cell

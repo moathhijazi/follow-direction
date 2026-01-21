@@ -1,14 +1,12 @@
 import { useAuth } from "@/hooks/use-auth";
 import React from "react";
 import { Text, View } from "react-native";
-import { Icon } from "react-native-paper";
+import { Button, Icon } from "react-native-paper";
 export default function ProfileDashboard() {
   const { logout, user, profile } = useAuth();
+
   return (
-    <View className="flex-1 p-6">
-      <View className="">
-        <Text className="font-semi-bold text-lg">الحساب</Text>
-      </View>
+    <View className="flex-1 p-6 flex justify-center items-center">
       <View className="mt-6">
         <View className="flex justify-center items-center">
           <Icon source={"account"} size={60} />
@@ -18,6 +16,10 @@ export default function ProfileDashboard() {
           <Text className="font-semi-bold text-2xl">{user?.email}</Text>
         </View>
       </View>
+
+      <Button className="mt-6" textColor="red" mode="text" onPress={logout}>
+        تسجيل الخروج
+      </Button>
     </View>
   );
 }

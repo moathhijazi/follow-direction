@@ -1,7 +1,9 @@
 import * as React from "react";
 import { View } from "react-native";
-import { ActivityIndicator, BottomNavigation, Text } from "react-native-paper";
+import { ActivityIndicator, BottomNavigation } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { Text } from "react-native";
 
 import HomeDashboard from "@/admin/HomeDashboard";
 import ProfileDashboard from "@/admin/ProfileDashboard";
@@ -19,7 +21,9 @@ const Dashboard = () => {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#2563eb" />
-        <Text className="mt-4 text-gray-600">جاري تحميل البيانات...</Text>
+        <Text className="mt-4 text-gray-600 font-reg">
+          جاري تحميل البيانات...
+        </Text>
       </View>
     );
   }
@@ -79,7 +83,7 @@ const Dashboard = () => {
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
         renderScene={renderScene}
-        sceneAnimationType="opacity"
+        sceneAnimationType="shifting"
         activeColor="#2563eb"
         inactiveColor="#6b7280"
         activeIndicatorStyle={{ backgroundColor: "#2563eb" }}

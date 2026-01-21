@@ -23,7 +23,11 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
+import usePushNotification from "@/hooks/use-notifications";
+
 export default function LoginScreen() {
+  const { registerForPushNotificationsAsync, isLoading } =
+    usePushNotification();
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
@@ -51,6 +55,8 @@ export default function LoginScreen() {
         showSnackbar("حدث خطأ أثناء تسجيل الدخول");
         return;
       }
+
+      showSnackbar("تم تسجيل الدخول بنجاح");
       router.replace("/(admin)/(dashboard)");
     });
   };

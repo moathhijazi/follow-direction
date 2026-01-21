@@ -1,6 +1,6 @@
 import { useModal } from "@/providers/modal-provider";
 import React from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { Button, Divider } from "react-native-paper";
 type RequestDetailsContentProps = {
   from: string;
@@ -10,6 +10,8 @@ type RequestDetailsContentProps = {
   isFull: boolean;
   status: "pending" | "rejected" | "processing" | "done";
   onDelete?: () => void;
+  onAccept?: () => void;
+  onReject?: () => void;
 };
 
 export default function RequestDetailsContent({
@@ -19,17 +21,35 @@ export default function RequestDetailsContent({
   phone,
   isFull,
   onDelete,
+  onAccept,
+  onReject,
   status,
 }: RequestDetailsContentProps) {
   const { close } = useModal();
+
   const handleDelete = () => {
     if (onDelete) {
       onDelete();
     }
     close();
   };
+
+  const handleAccept = async () => {
+    if (onAccept) {
+      onAccept();
+    }
+    close();
+  };
+
+  const handleReject = async () => {
+    if (onReject) {
+      onReject();
+    }
+    close();
+  };
+
   return (
-    <View className="h-full w-full p-12">
+    <ScrollView className="h-full w-full p-12">
       <View>
         <Text className="text-lg font-semi-bold mb-2 text-center">
           تفاصيل الطلب
@@ -78,10 +98,20 @@ export default function RequestDetailsContent({
               الطلب قيد الانتظار
             </Text>
             <View className="mt-4 gap-y-4">
-              <Button icon={"check"} className="" mode="contained">
+              <Button
+                icon={"check"}
+                className=""
+                mode="contained"
+                onPress={handleAccept}
+              >
                 قبول الطلب
               </Button>
-              <Button icon={"close"} mode="outlined" textColor="gray">
+              <Button
+                icon={"close"}
+                mode="outlined"
+                textColor="gray"
+                onPress={handleReject}
+              >
                 رفض الطلب
               </Button>
             </View>
@@ -99,6 +129,6 @@ export default function RequestDetailsContent({
           </Button>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
