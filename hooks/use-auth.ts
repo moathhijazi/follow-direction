@@ -191,6 +191,7 @@ export const useAuth = () => {
           session,
           profile,
         });
+        // set up push notifications after login
       } else {
         await clearStoredSession();
         setAuthState({

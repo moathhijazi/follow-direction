@@ -21,7 +21,7 @@ export default function NewCar() {
   const { close } = useModal();
   const nextRef = useRef<{ goNext: () => void; getIndex: () => number }>(null);
 
-  const { sendNotificationToAllUsers } = useNotification();
+  const { sendToAllUsers } = useNotification();
 
   const handleGoNext = () => {
     nextRef?.current?.goNext();
@@ -41,10 +41,7 @@ export default function NewCar() {
         if (res.status !== 201) return;
         // send notification to admin about new request
         // TODO: implement notification to admin
-        sendNotificationToAllUsers({
-          title: "طلب جديد",
-          body: "تم إنشاء طلب جديد من قبل مستخدم",
-        });
+        sendToAllUsers("طلب جديد", "تم إنشاء طلب جديد لفحص السيارة");
         close();
         setLoading(false);
         Alert.alert(

@@ -23,11 +23,7 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-import usePushNotification from "@/hooks/use-notifications";
-
 export default function LoginScreen() {
-  const { registerForPushNotificationsAsync, isLoading } =
-    usePushNotification();
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();

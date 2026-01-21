@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { View } from "react-native";
 import { ActivityIndicator, BottomNavigation } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,10 +11,14 @@ import RequestsDashboard from "@/admin/RequestsDashboard";
 import UsersDashboard from "@/admin/UsersDashboard";
 
 import { useAuth } from "@/hooks/use-auth";
+import usePushNotification from "@/hooks/use-notifications";
 
 const Dashboard = () => {
   const { profile, loading } = useAuth();
-  const [index, setIndex] = React.useState(0); // This MUST be unconditional
+  const [index, setIndex] = React.useState(0);
+  const { registerToken } = usePushNotification();
+
+  // This MUST be unconditional
 
   // Show loading while checking auth
   if (loading) {
@@ -36,6 +40,17 @@ const Dashboard = () => {
       </View>
     );
   }
+
+  // if (isLoading) {
+  //   return (
+  //     <View className="flex-1 justify-center items-center">
+  //       <ActivityIndicator size="large" color="#2563eb" />
+  //       <Text className="mt-4 text-gray-600 font-reg">
+  //         جاري اعداد الاشعارات...
+  //       </Text>
+  //     </View>
+  //   );
+  // }
 
   // Determine user access level
   const userAccess = profile.access || "limit";
