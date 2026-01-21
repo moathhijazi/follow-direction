@@ -41,3 +41,15 @@ interface UserRole {
 | User          | Read own profile          |
 | Limited Admin | Read all profiles         |
 | Full Admin    | Full CRUD on all profiles |
+
+🔔 Push Notification System
+
+Real-time notifications via Expo
+
+Broadcast notifications (admins only)
+
+Targeted notifications per user
+
+Expo push token storage
+
+Background delivery support
